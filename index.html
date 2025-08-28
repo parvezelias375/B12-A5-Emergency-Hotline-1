@@ -163,5 +163,73 @@
   
 </section>
 
+<script>
+  let heartCount = 0;
+  let copyCount = 0;
+  let coinCount = 100;
+
+  const heartCounter = document.getElementById("heartCount");
+  const copyCounter = document.getElementById("copyCount");
+  const coinCounter = document.getElementById("coinCount");
+  const historyList = document.getElementById("historyList");
+
+  // Heart button
+  document.querySelectorAll(".heart").forEach(heart=>{
+    heart.addEventListener("click",()=>{
+      heartCount++;
+      heartCounter.innerText = heartCount;
+      heart.innerText = "❤️";
+    });
+  });
+
+  // Copy button
+  document.querySelectorAll(".copy-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const number = btn.parentElement.previousElementSibling.previousElementSibling.innerText;
+      navigator.clipboard.writeText(number);
+      copyCount++;
+      copyCounter.innerText = copyCount;
+      alert("Copied: " + number);
+    });
+  });
+
+  // Call button
+  document.querySelectorAll(".call-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const serviceName = btn.parentElement.parentElement.querySelector("h3").innerText;
+      const serviceNumber = btn.parentElement.parentElement.querySelector("p").innerText;
+
+      if(coinCount < 20){
+        alert("Not enough coins to make a call!");
+        return;
+      }
+
+      coinCount -= 20;
+      coinCounter.innerText = coinCount;
+      alert("Calling " + serviceName + " (" + serviceNumber + ")");
+
+      // Add to history
+   if(historyList.querySelector("p")) historyList.innerHTML="";
+    const item = document.createElement("div");
+    item.className="history-item";
+
+    const now = new Date();
+    const timeString = now.toLocaleTimeString();
+
+    item.innerText = serviceName + " - " + serviceNumber + " (" + timeString + ")";
+    historyList.appendChild(item);
+      
+    });
+    
+  });
+
+  
+
+  // Clear history
+  document.getElementById("clearHistory").addEventListener("click",()=>{
+    historyList.innerHTML="<p>No calls yet...</p>";
+  });
+</script>
+
 </body>
 </html>
